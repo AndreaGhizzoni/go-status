@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}}</title>
+</head>
+<body>
+    <h1>Controlling:</h1>
+    <input type="submit" value="shutdown"
+                         onclick="window.location='/shutdown';">
+    <h1>CPU:</h1>
+    <table>
+        <tr>
+            <td>used: </td><td>{{.CPULoad.Load1}}</td>
+        </tr>
+        <tr>
+            <td>count: </td><td>{{.CPUCount}}</td>
+        </tr>
+        <tr>
+            <td>model: </td><td>{{.CPUModel}}</td>
+        </tr>
+        <tr>
+            <td>cache: </td><td>{{.CPUCache}}</td>
+        </tr>
+        {{with .CPUsStat}}
+            {{range .}}
+            <tr>
+                <td>core {{.CPU}}:</td><td>{{.Mhz}} Hz</td>
+            </tr>
+            {{end}}
+        {{end}}
+    </table>
+
+    <h1>RAM:</h1>
+    {{with .VMStat}}
+    <table>
+        <tr>
+            <td>total: </td><td>{{.Total}}</td>
+        </tr>
+        <tr>
+            <td>available: </td><td>{{.Available}}</td>
+        </tr>
+        <tr>
+            <td>used: </td><td>{{.Used}} - {{.UsedPercent}} %</td>
+        </tr>
+        <tr>
+            <td>free: </td><td>{{.Free}}</td>
+        </tr>
+    </table>
+    {{end}}
+
+    <h1>Disk:</h1>
+    <table>
+        {{with .Partitions}}
+            {{range .}}
+                <tr>
+                    <td>{{.Mountpoint}} </td> <td>{{.Device}}</td><td>{{.Fstype}}</td>
+                </tr>
+            {{end}}
+        {{end}}
+    </table>
+
+    {{range $key, $value := .DiskUsagePaths}}
+    <table>
+        <tr>
+            <th>{{$key}}</th>
+        </tr>
+        <tr>
+            <td>fstype : </td><td>{{$value.Fstype}}</td>
+        </tr>
+        <tr>
+            <td>total : </td><td>{{$value.Total}}</td>
+        </tr>
+        <tr>
+            <td>free : </td><td>{{$value.Free}}</td>
+        </tr>
+        <tr>
+            <td>used : </td><td>{{$value.Used}} - {{$value.UsedPercent}} %</td>
+        </tr>
+    </table>
+    {{end}}
+
+    
+</body>
+</html>
+
