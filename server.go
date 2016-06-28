@@ -9,7 +9,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/AndreaGhizzoni/gos/page"
+	"github.com/AndreaGhizzoni/go-status/page"
 )
 
 var (

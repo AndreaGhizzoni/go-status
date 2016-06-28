@@ -5,7 +5,7 @@
     <title>{{.Title}}</title>
 </head>
 <body>
-    <h1>Controlling:</h1>
+    <h1>Controlling:</h1>Boot time: {{.UpTime}}
     <input type="submit" value="shutdown"
                          onclick="window.location='/shutdown';">
     <h1>CPU:</h1>
@@ -41,7 +41,7 @@
             <td>available: </td><td>{{.Available}}</td>
         </tr>
         <tr>
-            <td>used: </td><td>{{.Used}} - {{.UsedPercent}} %</td>
+            <td>used: </td><td>{{.Used}}, {{.UsedPercent}} %</td>
         </tr>
         <tr>
             <td>free: </td><td>{{.Free}}</td>
@@ -75,11 +75,23 @@
             <td>free : </td><td>{{$value.Free}}</td>
         </tr>
         <tr>
-            <td>used : </td><td>{{$value.Used}} - {{$value.UsedPercent}} %</td>
+            <td>used : </td><td>{{$value.Used}}, {{$value.UsedPercent}} %</td>
         </tr>
     </table>
     {{end}}
 
+    <h1>Network:</h1>
+    <table>
+        {{range .Interfaces}}
+            <tr>
+                <td>if: </td><td>{{.Name}}</td>
+                <td>mac: </td><td>{{.HardwareAddr}}</td>
+                {{range .Addrs}}
+                    <td>- {{.Addr}}</td>
+                {{end}}
+            </tr>
+        {{end}}
+    </table>
     
 </body>
 </html>
