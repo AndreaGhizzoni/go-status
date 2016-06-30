@@ -3,96 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <title>{{.Title}}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' 
+          rel='stylesheet' 
+          type='text/css'>
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="/template/css/normalize.css">
+    <link rel="stylesheet" href="/template/css/skeleton.css">
+    
+
+    <!-- Scripts
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="/template/image/favicon.png">
 </head>
 <body>
-    <h1>Controlling:</h1>Boot time: {{.UpTime}}
-    <input type="submit" value="shutdown"
-                         onclick="window.location='/shutdown';">
-    <h1>CPU:</h1>
-    <table>
-        <tr>
-            <td>used: </td><td>{{.CPULoad.Load1}}</td>
-        </tr>
-        <tr>
-            <td>count: </td><td>{{.CPUCount}}</td>
-        </tr>
-        <tr>
-            <td>model: </td><td>{{.CPUModel}}</td>
-        </tr>
-        <tr>
-            <td>cache: </td><td>{{.CPUCache}}</td>
-        </tr>
-        {{with .CPUsStat}}
-            {{range .}}
-            <tr>
-                <td>core {{.CPU}}:</td><td>{{.Mhz}} Hz</td>
-            </tr>
-            {{end}}
-        {{end}}
-    </table>
+    <div class="container">
+        <div class="row">
+            <div class="twelve columns">
+                <input type="submit" value="shutdown"
+                             onclick="window.location='/shutdown';">
+            </div>
+        </div>
 
-    <h1>RAM:</h1>
-    {{with .VMStat}}
-    <table>
-        <tr>
-            <td>total: </td><td>{{.Total}}</td>
-        </tr>
-        <tr>
-            <td>available: </td><td>{{.Available}}</td>
-        </tr>
-        <tr>
-            <td>used: </td><td>{{.Used}}, {{.UsedPercent}} %</td>
-        </tr>
-        <tr>
-            <td>free: </td><td>{{.Free}}</td>
-        </tr>
-    </table>
-    {{end}}
+        <div class="row">
+            <div class="twelve columns">
+                <h3>Up time: {{.UpTime}}</h3> 
+            </div>
+        </div>
 
-    <h1>Disk:</h1>
-    <table>
-        {{with .Partitions}}
-            {{range .}}
-                <tr>
-                    <td>{{.Mountpoint}} </td> <td>{{.Device}}</td><td>{{.Fstype}}</td>
-                </tr>
-            {{end}}
-        {{end}}
-    </table>
+        <div class="row">
+            <div class="six columns">
+                <h3>CPU:</h3>
+                <table class="u-full-width">
+                    <tbody>
+                        <tr>
+                            <td>count: </td><td>{{.CPUCount}}</td>
+                        </tr>
+                        <tr>
+                            <td>model: </td><td>{{.CPUModel}}</td>
+                        </tr>
+                        <tr>
+                            <td>cache: </td><td>{{.CPUCache}}</td>
+                        </tr>
+                        {{with .CPUsStat}}
+                            {{range .}}
+                            <tr>
+                                <td>core {{.CPU}}:</td><td>{{.Mhz}} Hz</td>
+                            </tr>
+                            {{end}}
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
 
-    {{range $key, $value := .DiskUsagePaths}}
-    <table>
-        <tr>
-            <th>{{$key}}</th>
-        </tr>
-        <tr>
-            <td>fstype : </td><td>{{$value.Fstype}}</td>
-        </tr>
-        <tr>
-            <td>total : </td><td>{{$value.Total}}</td>
-        </tr>
-        <tr>
-            <td>free : </td><td>{{$value.Free}}</td>
-        </tr>
-        <tr>
-            <td>used : </td><td>{{$value.Used}}, {{$value.UsedPercent}} %</td>
-        </tr>
-    </table>
-    {{end}}
-
-    <h1>Network:</h1>
-    <table>
-        {{range .Interfaces}}
-            <tr>
-                <td>if: </td><td>{{.Name}}</td>
-                <td>mac: </td><td>{{.HardwareAddr}}</td>
-                {{range .Addrs}}
-                    <td>- {{.Addr}}</td>
+            <div class="six columns">
+                <h3>RAM:</h3>
+                {{with .VMStat}}
+                <table class="u-full-width">
+                    <tbody>
+                        <tr>
+                            <td>total: </td><td>{{.Total}}</td>
+                        </tr>
+                        <tr>
+                            <td>available: </td><td>{{.Available}}</td>
+                        </tr>
+                        <tr>
+                            <td>used: </td><td>{{.Used}}, {{.UsedPercent}} %</td>
+                        </tr>
+                        <tr>
+                            <td>free: </td><td>{{.Free}}</td>
+                        </tr>
+                    </tbody>
+                </table>
                 {{end}}
-            </tr>
-        {{end}}
-    </table>
-    
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="six columns">
+                <h3>Disk:</h3>
+                <table class="u-full-width">
+                    <tbody>
+                        {{with .Partitions}}
+                            {{range .}}
+                                <tr>
+                                    <td>{{.Mountpoint}} </td> 
+                                    <td>{{.Device}} </td>
+                                    <td>{{.Fstype}} </td>
+                                </tr>
+                            {{end}}
+                        {{end}}
+                    </tbody>
+                </table>
+
+                {{range $key, $value := .DiskUsagePaths}}
+                <table class="u-full-width">
+                    <tbody>
+                        <tr>
+                            <th>{{$key}}</th>
+                        </tr>
+                        <tr>
+                            <td>fstype : </td><td>{{$value.Fstype}}</td>
+                        </tr>
+                        <tr>
+                            <td>total : </td><td>{{$value.Total}}</td>
+                        </tr>
+                        <tr>
+                            <td>free : </td><td>{{$value.Free}}</td>
+                        </tr>
+                        <tr>
+                            <td>used : </td>
+                            <td>{{$value.Used}}, {{$value.UsedPercent}} %</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{end}}
+            </div>
+
+            <div class="six columns">
+                <h3>Network:</h3>
+                <table class="u-full-width">
+                    <thead> 
+                        <tr>
+                            <th>if</th>
+                            <th>mac</th>
+                            <th>address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Interfaces}}
+                            <tr>
+                                <td>{{.Name}}</td>
+                                <td>{{.HardwareAddr}}</td>
+                                {{range .Addrs}}
+                                    <td>{{.Addr}}</td>
+                                {{end}}
+                            </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div> <!-- close container -->
 </body>
 </html>
 

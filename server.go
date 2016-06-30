@@ -19,15 +19,19 @@ var (
 	Error   *log.Logger
 )
 
-// application home directory
-var appHome = "/home/andrea/.gos/"
+var (
+	// application home directory
+	appHome = "/home/andrea/.gos/"
 
-// Variable to hold all template file just specify the patter where to find all
-// the templates
-var templates = template.Must(template.ParseGlob(appHome + "template/*.html"))
+	// template home directory
+	templateDir = appHome + "template/"
 
-// default application log path
-var defLogPath = appHome + "gos.log"
+	// Variable to hold all html template files
+	html = template.Must(template.ParseGlob(templateDir + "*.html"))
+
+	// default application log path
+	defLogPath = appHome + "gos.log"
+)
 
 // function to initialize the logger
 func initLogger(
@@ -59,7 +63,7 @@ func initHomeDir() {
 // tmpl template name
 // p page structure where to find the data
 func renderTemplate(w http.ResponseWriter, tmpl string, p *page.Structure) {
-	err := templates.ExecuteTemplate(w, tmpl+".html", p)
+	err := html.ExecuteTemplate(w, tmpl+".html", p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -110,6 +114,8 @@ func main() {
 	Trace.Print("Program Start")
 	http.HandleFunc("/", rootHandler)
 	http.HandleFunc("/shutdown", shutdownHandler)
+	fs := http.FileServer(http.Dir(templateDir))
+	http.Handle("/template/", http.StripPrefix("/template/", fs))
 	Trace.Print("Server Started")
 	Error.Fatal(
 		http.ListenAndServe(":8080", nil))
