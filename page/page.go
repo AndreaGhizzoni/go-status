@@ -9,7 +9,6 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
-	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
 )
@@ -21,7 +20,6 @@ type Structure struct {
 	CPUModel       string
 	CPUCache       int32
 	CPUsStat       []cpu.InfoStat
-	CPULoad        *load.AvgStat
 	VMStat         *mem.VirtualMemoryStat
 	DiskUsagePaths map[string]*disk.UsageStat
 	Partitions     []disk.PartitionStat
@@ -36,17 +34,24 @@ func formatSeconds(seconds uint64) string {
 	return fmt.Sprintf("%d:%d:%d", int64(h), int64(m), int64(s))
 }
 
+func panicIf(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 func New() *Structure {
-	ut, _ := host.Uptime()
+	ut, err := host.Uptime()
+	panicIf(err)
 
 	cpuInfo, err := cpu.Info()
+	panicIf(err)
 
 	cpuCounts, err := cpu.Counts(true)
-	if err != nil {
-		cpuCounts = -1
-	}
+	panicIf(err)
 
-	vmstat, _ := mem.VirtualMemory()
+	vmstat, err := mem.VirtualMemory()
+	panicIf(err)
 
 	diskPaths := make(map[string]*disk.UsageStat)
 	path := "/home/andrea"
@@ -55,11 +60,11 @@ func New() *Structure {
 		diskPaths[path] = stat
 	}
 
-	p, _ := disk.Partitions(false)
+	p, err := disk.Partitions(false)
+	panicIf(err)
 
-	l, _ := load.Avg()
-
-	interf, _ := net.Interfaces()
+	interf, err := net.Interfaces()
+	panicIf(err)
 
 	return &Structure{
 		Title:          "Rasp status",
@@ -68,7 +73,6 @@ func New() *Structure {
 		CPUModel:       cpuInfo[0].ModelName,
 		CPUCache:       cpuInfo[0].CacheSize,
 		CPUsStat:       cpuInfo,
-		CPULoad:        l,
 		VMStat:         vmstat,
 		DiskUsagePaths: diskPaths,
 		Partitions:     p,
