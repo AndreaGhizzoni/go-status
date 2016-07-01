@@ -1,4 +1,4 @@
-//TODO add doc
+//TODO add doc & description
 package page
 
 import (
@@ -40,6 +40,7 @@ func panicIf(e error) {
 	}
 }
 
+// TODO refactoring this method into NewPageStructure
 func New() *Structure {
 	ut, err := host.Uptime()
 	panicIf(err)
