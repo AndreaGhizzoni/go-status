@@ -38,7 +38,7 @@ func NewCPU() *Cpu {
 
 	return &Cpu{
 		Vendor:    cpuInfo[0].VendorID,
-		Model:     cpuInfo[0].Model,
+		Model:     cpuInfo[0].ModelName,
 		Family:    cpuInfo[0].Family,
 		Cache:     cpuInfo[0].CacheSize,
 		CoreCount: cpuCount,
