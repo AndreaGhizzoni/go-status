@@ -8,7 +8,6 @@ import (
 
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
-	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
 )
 
@@ -16,7 +15,7 @@ type Structure struct {
 	Title          string
 	UpTime         string
 	CPU            Cpu
-	VMStat         *mem.VirtualMemoryStat
+	RAM            Ram
 	DiskUsagePaths map[string]*disk.UsageStat
 	Partitions     []disk.PartitionStat
 	Interfaces     []net.InterfaceStat
@@ -41,9 +40,6 @@ func New() *Structure {
 	ut, err := host.Uptime()
 	panicIf(err)
 
-	vmstat, err := mem.VirtualMemory()
-	panicIf(err)
-
 	diskPaths := make(map[string]*disk.UsageStat)
 	path := "/home/andrea"
 	stat, err := disk.Usage(path)
@@ -61,7 +57,7 @@ func New() *Structure {
 		Title:          "Rasp status",
 		UpTime:         formatSeconds(ut),
 		CPU:            *NewCPU(),
-		VMStat:         vmstat,
+		RAM:            *NewRAM(),
 		DiskUsagePaths: diskPaths,
 		Partitions:     p,
 		Interfaces:     interf,

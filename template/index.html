@@ -74,24 +74,23 @@
 
             <div class="six columns">
                 <h3>RAM:</h3>
-                {{with .VMStat}}
                 <table class="u-full-width">
                     <tbody>
                         <tr>
-                            <td>total: </td><td>{{.Total}}</td>
+                            <td>total: </td><td>{{.RAM.Total}}</td>
                         </tr>
                         <tr>
-                            <td>available: </td><td>{{.Available}}</td>
+                            <td>available: </td><td>{{.RAM.Available}}</td>
                         </tr>
                         <tr>
-                            <td>used: </td><td>{{.Used}}, {{.UsedPercent}} %</td>
+                            <td>used: </td>
+                            <td>{{.RAM.Used}}, {{.RAM.UsedPercent}} %</td>
                         </tr>
                         <tr>
-                            <td>free: </td><td>{{.Free}}</td>
+                            <td>free: </td><td>{{.RAM.Free}}</td>
                         </tr>
                     </tbody>
                 </table>
-                {{end}}
             </div>
         </div>
 
