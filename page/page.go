@@ -2,23 +2,19 @@
 package page
 
 import (
+	"fmt"
 	"math"
 
-	"fmt"
-
-	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
-	"github.com/shirou/gopsutil/net"
 )
 
 type Structure struct {
-	Title          string
-	UpTime         string
-	CPU            Cpu
-	RAM            Ram
-	DiskUsagePaths map[string]*disk.UsageStat
-	Partitions     []disk.PartitionStat
-	Interfaces     []net.InterfaceStat
+	Title    string
+	UpTime   string
+	CPU      Cpu
+	RAM      Ram
+	DiskStat Disk
+	NetStat  Net
 }
 
 func formatSeconds(seconds uint64) string {
@@ -40,26 +36,12 @@ func New() *Structure {
 	ut, err := host.Uptime()
 	panicIf(err)
 
-	diskPaths := make(map[string]*disk.UsageStat)
-	path := "/home/andrea"
-	stat, err := disk.Usage(path)
-	if err == nil {
-		diskPaths[path] = stat
-	}
-
-	p, err := disk.Partitions(false)
-	panicIf(err)
-
-	interf, err := net.Interfaces()
-	panicIf(err)
-
 	return &Structure{
-		Title:          "Rasp status",
-		UpTime:         formatSeconds(ut),
-		CPU:            *NewCPU(),
-		RAM:            *NewRAM(),
-		DiskUsagePaths: diskPaths,
-		Partitions:     p,
-		Interfaces:     interf,
+		Title:    "Rasp status",
+		UpTime:   formatSeconds(ut),
+		CPU:      *NewCPU(),
+		RAM:      *NewRAM(),
+		DiskStat: *NewDisk(),
+		NetStat:  *NewNet(),
 	}
 }

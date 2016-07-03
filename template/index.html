@@ -99,7 +99,7 @@
                 <h3>Disk:</h3>
                 <table class="u-full-width">
                     <tbody>
-                        {{with .Partitions}}
+                        {{with .DiskStat.Partitions}}
                             {{range .}}
                                 <tr>
                                     <td>{{.Mountpoint}} </td> 
@@ -111,7 +111,7 @@
                     </tbody>
                 </table>
 
-                {{range $key, $value := .DiskUsagePaths}}
+                {{range $key, $value := .DiskStat.Paths}}
                 <table class="u-full-width">
                     <tbody>
                         <tr>
@@ -146,7 +146,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{range .Interfaces}}
+                        {{range .NetStat.Interfaces}}
                             <tr>
                                 <td>{{.Name}}</td>
                                 <td>{{.HardwareAddr}}</td>
