@@ -6,7 +6,6 @@ import (
 
 	"fmt"
 
-	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
@@ -16,10 +15,7 @@ import (
 type Structure struct {
 	Title          string
 	UpTime         string
-	CPUCount       int
-	CPUModel       string
-	CPUCache       int32
-	CPUsStat       []cpu.InfoStat
+	CPU            Cpu
 	VMStat         *mem.VirtualMemoryStat
 	DiskUsagePaths map[string]*disk.UsageStat
 	Partitions     []disk.PartitionStat
@@ -45,12 +41,6 @@ func New() *Structure {
 	ut, err := host.Uptime()
 	panicIf(err)
 
-	cpuInfo, err := cpu.Info()
-	panicIf(err)
-
-	cpuCounts, err := cpu.Counts(true)
-	panicIf(err)
-
 	vmstat, err := mem.VirtualMemory()
 	panicIf(err)
 
@@ -70,10 +60,7 @@ func New() *Structure {
 	return &Structure{
 		Title:          "Rasp status",
 		UpTime:         formatSeconds(ut),
-		CPUCount:       cpuCounts,
-		CPUModel:       cpuInfo[0].ModelName,
-		CPUCache:       cpuInfo[0].CacheSize,
-		CPUsStat:       cpuInfo,
+		CPU:            *NewCPU(),
 		VMStat:         vmstat,
 		DiskUsagePaths: diskPaths,
 		Partitions:     p,

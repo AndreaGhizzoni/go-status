@@ -50,15 +50,18 @@
                 <table class="u-full-width">
                     <tbody>
                         <tr>
-                            <td>count: </td><td>{{.CPUCount}}</td>
+                            <td>count: </td><td>{{.CPU.CoreCount}}</td>
                         </tr>
                         <tr>
-                            <td>model: </td><td>{{.CPUModel}}</td>
+                            <td>model: </td><td>{{.CPU.Model}}</td>
                         </tr>
                         <tr>
-                            <td>cache: </td><td>{{.CPUCache}}</td>
+                            <td>vendor: </td><td>{{.CPU.Vendor}}</td>
                         </tr>
-                        {{with .CPUsStat}}
+                        <tr>
+                            <td>cache: </td><td>{{.CPU.Cache}}</td>
+                        </tr>
+                        {{with .CPU.Cores}}
                             {{range .}}
                             <tr>
                                 <td>core {{.CPU}}:</td><td>{{.Mhz}} Hz</td>
