@@ -15,36 +15,15 @@ type Ram struct {
 	Free        string
 }
 
-const (
-	kilobyte uint64 = 1024
-	megabyte uint64 = 1048576
-	gigabyte uint64 = 1073741824
-)
-
-// i must be represented in bytes
-func format(i uint64) string {
-	/*if i >= gigabyte {
-		return fmt.Sprintf("%d Gb", i/gigabyte)
-	} else
-	*/
-	if i >= megabyte {
-		return fmt.Sprintf("%d Mb", i/megabyte)
-	} else if i >= kilobyte {
-		return fmt.Sprintf("%d Kb", i/kilobyte)
-	} else {
-		return "error"
-	}
-}
-
 func NewRAM() *Ram {
 	vmstat, _ := mem.VirtualMemory()
 	// TODO check err
 
 	return &Ram{
-		Total:       format(vmstat.Total),
-		Available:   format(vmstat.Available),
-		Used:        format(vmstat.Used),
+		Total:       Format(vmstat.Total, Megabyte),
+		Available:   Format(vmstat.Available, Megabyte),
+		Used:        Format(vmstat.Used, Megabyte),
 		UsedPercent: fmt.Sprintf("%.2f", vmstat.UsedPercent),
-		Free:        format(vmstat.Free),
+		Free:        Format(vmstat.Free, Megabyte),
 	}
 }
