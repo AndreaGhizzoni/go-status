@@ -2,6 +2,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"html/template"
 	"io"
 	"log"
@@ -13,6 +15,11 @@ import (
 )
 
 var (
+	showVersion = false
+	version     = "0.1.0"
+)
+
+var (
 	Trace   *log.Logger
 	Info    *log.Logger
 	Warning *log.Logger
@@ -20,6 +27,8 @@ var (
 )
 
 var (
+	port = ":8080"
+
 	// application home directory
 	appHome = "/home/andrea/.gos/"
 
@@ -96,27 +105,34 @@ func exists(path string) (bool, error) {
 }
 
 func main() {
-	initHomeDir()
+	flag.BoolVar(&showVersion, "version", false, "show the current version")
+	flag.Parse()
 
-	logFile, err := os.OpenFile(defLogPath,
-		os.O_CREATE|os.O_WRONLY|os.O_APPEND,
-		0666)
-	if err != nil {
-		log.Fatalln("Failed to open log file :", err)
+	if showVersion {
+		fmt.Println(version)
+	} else {
+		initHomeDir()
+
+		logFile, err := os.OpenFile(defLogPath,
+			os.O_CREATE|os.O_WRONLY|os.O_APPEND,
+			0666)
+		if err != nil {
+			log.Fatalln("Failed to open log file :", err)
+		}
+		defer func() {
+			Trace.Print("Closing log file")
+			logFile.Close()
+		}()
+
+		initLogger(logFile, logFile, logFile, logFile)
+
+		Trace.Print("Program Start")
+		http.HandleFunc("/", rootHandler)
+		http.HandleFunc("/shutdown", shutdownHandler)
+		fs := http.FileServer(http.Dir(templateDir))
+		http.Handle("/template/", http.StripPrefix("/template/", fs))
+		Trace.Print("Server Started")
+		Error.Fatal(
+			http.ListenAndServe(port, nil))
 	}
-	defer func() {
-		Trace.Print("Closing log file")
-		logFile.Close()
-	}()
-
-	initLogger(logFile, logFile, logFile, logFile)
-
-	Trace.Print("Program Start")
-	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/shutdown", shutdownHandler)
-	fs := http.FileServer(http.Dir(templateDir))
-	http.Handle("/template/", http.StripPrefix("/template/", fs))
-	Trace.Print("Server Started")
-	Error.Fatal(
-		http.ListenAndServe(":8080", nil))
 }
