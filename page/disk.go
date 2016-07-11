@@ -1,11 +1,7 @@
 // TODO add doc & description
 package page
 
-import (
-	"fmt"
-
-	"github.com/shirou/gopsutil/disk"
-)
+import "github.com/shirou/gopsutil/disk"
 
 // paths to watch
 var paths = []string{
@@ -39,7 +35,7 @@ func NewDisk() *Disk {
 				Total:       Format(stat.Total, Gigabyte),
 				Free:        Format(stat.Free, Gigabyte),
 				Used:        Format(stat.Used, Gigabyte),
-				UsedPercent: fmt.Sprintf("%.2f", stat.UsedPercent),
+				UsedPercent: FormatPercentege(stat.UsedPercent),
 			}
 		}
 	}

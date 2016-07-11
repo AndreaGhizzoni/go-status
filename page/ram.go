@@ -1,11 +1,7 @@
 // TODO add doc
 package page
 
-import (
-	"fmt"
-
-	"github.com/shirou/gopsutil/mem"
-)
+import "github.com/shirou/gopsutil/mem"
 
 type Ram struct {
 	Total       string
@@ -23,7 +19,7 @@ func NewRAM() *Ram {
 		Total:       Format(vmstat.Total, Megabyte),
 		Available:   Format(vmstat.Available, Megabyte),
 		Used:        Format(vmstat.Used, Megabyte),
-		UsedPercent: fmt.Sprintf("%.2f", vmstat.UsedPercent),
+		UsedPercent: FormatPercentege(vmstat.UsedPercent),
 		Free:        Format(vmstat.Free, Megabyte),
 	}
 }

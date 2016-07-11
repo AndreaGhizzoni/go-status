@@ -23,3 +23,7 @@ func Format(i uint64, level uint64) string {
 		return "error form format"
 	}
 }
+
+func FormatPercentege(p float64) string {
+	return fmt.Sprintf("%.2f", p)
+}
