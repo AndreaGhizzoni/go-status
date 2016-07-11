@@ -1,33 +1,51 @@
 // TODO add doc & description
 package page
 
-import "github.com/shirou/gopsutil/disk"
+import (
+	"fmt"
+
+	"github.com/shirou/gopsutil/disk"
+)
 
 // paths to watch
 var paths = []string{
 	"/home/andrea",
 }
 
+type PathStat struct {
+	Fstype      string
+	Total       string
+	Free        string
+	Used        string
+	UsedPercent string
+}
+
 type Disk struct {
-	Paths      map[string]*disk.UsageStat
 	Partitions []disk.PartitionStat
+	Paths      map[string]PathStat
 }
 
 func NewDisk() *Disk {
 	partitions, _ := disk.Partitions(false)
 	// TODO manage erros
 
-	d := &Disk{
-		Paths:      make(map[string]*disk.UsageStat),
-		Partitions: partitions,
-	}
+	mappingPaths := make(map[string]PathStat)
 
 	for _, path := range paths {
 		stat, err := disk.Usage(path)
 		if err == nil {
-			d.Paths[path] = stat
+			mappingPaths[path] = PathStat{
+				Fstype:      stat.Fstype,
+				Total:       Format(stat.Total, Gigabyte),
+				Free:        Format(stat.Free, Gigabyte),
+				Used:        Format(stat.Used, Gigabyte),
+				UsedPercent: fmt.Sprintf("%.2f", stat.UsedPercent),
+			}
 		}
 	}
 
-	return d
+	return &Disk{
+		Partitions: partitions,
+		Paths:      mappingPaths,
+	}
 }
