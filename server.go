@@ -45,14 +45,12 @@ var (
 // function to initialize the logger
 func initLogger(
 	traceHandle io.Writer,
-	infoHandle io.Writer,
 	warningHandle io.Writer,
 	errorHandle io.Writer) {
 
 	flag := log.Ldate | log.Ltime | log.Lshortfile
 
 	Trace = log.New(traceHandle, "TRACE: ", flag)
-	Info = log.New(infoHandle, "INFO: ", flag)
 	Warning = log.New(warningHandle, "WARNING: ", flag)
 	Error = log.New(errorHandle, "ERROR: ", flag)
 }
@@ -124,7 +122,7 @@ func main() {
 			logFile.Close()
 		}()
 
-		initLogger(logFile, logFile, logFile, logFile)
+		initLogger(logFile, logFile, logFile)
 
 		Trace.Print("Program Start")
 		http.HandleFunc("/", rootHandler)
