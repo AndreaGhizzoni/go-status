@@ -1,4 +1,4 @@
-// TODO add description
+// this file represents the cpu part of the package page
 package page
 
 import "github.com/shirou/gopsutil/cpu"
