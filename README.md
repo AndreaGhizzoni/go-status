@@ -20,3 +20,7 @@ To sum up `.gos` folder structure:
 
 Style and images can be customize as the user want, just follow the template 
 parameters in `index.html`
+
+# Thanks to
+[gopsutil](https://github.com/shirou/gopsutil)
+[skeleton](http://getskeleton.com/)
