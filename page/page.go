@@ -1,4 +1,4 @@
-//TODO add doc & description
+// main page structure
 package page
 
 import (
@@ -25,16 +25,11 @@ func formatSeconds(seconds uint64) string {
 	return fmt.Sprintf("%d:%d:%d", int64(h), int64(m), int64(s))
 }
 
-func panicIf(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-// TODO refactoring this method into NewPageStructure
 func New() *Structure {
 	ut, err := host.Uptime()
-	panicIf(err)
+	if err != nil {
+		panic(e)
+	}
 
 	return &Structure{
 		Title:    "Rasp status",
