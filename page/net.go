@@ -1,4 +1,4 @@
-// TODO add doc & description
+// this file represents the net part of package page
 package page
 
 import "github.com/shirou/gopsutil/net"

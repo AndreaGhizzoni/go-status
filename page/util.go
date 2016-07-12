@@ -1,3 +1,4 @@
+// this file represents the utility collections of package page
 package page
 
 import "fmt"

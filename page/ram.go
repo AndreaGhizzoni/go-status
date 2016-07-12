@@ -1,4 +1,4 @@
-// TODO add doc
+// this file represents the ram part of the package page
 package page
 
 import "github.com/shirou/gopsutil/mem"
