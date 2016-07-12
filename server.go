@@ -1,4 +1,4 @@
-// TODO add package doc
+// main package that contains the web server
 package main
 
 import (
@@ -20,10 +20,8 @@ var (
 )
 
 var (
-	Trace   *log.Logger
-	Info    *log.Logger
-	Warning *log.Logger
-	Error   *log.Logger
+	Trace *log.Logger
+	Error *log.Logger
 )
 
 var (
@@ -43,16 +41,11 @@ var (
 )
 
 // function to initialize the logger
-func initLogger(
-	traceHandle io.Writer,
-	warningHandle io.Writer,
-	errorHandle io.Writer) {
-
+func initLogger(w io.Writer) {
 	flag := log.Ldate | log.Ltime | log.Lshortfile
 
-	Trace = log.New(traceHandle, "TRACE: ", flag)
-	Warning = log.New(warningHandle, "WARNING: ", flag)
-	Error = log.New(errorHandle, "ERROR: ", flag)
+	Trace = log.New(w, "TRACE: ", flag)
+	Error = log.New(w, "ERROR: ", flag)
 }
 
 // function to check if home directory exists, if not create a new one
@@ -122,7 +115,7 @@ func main() {
 			logFile.Close()
 		}()
 
-		initLogger(logFile, logFile, logFile)
+		initLogger(logFile)
 
 		Trace.Print("Program Start")
 		http.HandleFunc("/", rootHandler)
