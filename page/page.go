@@ -28,7 +28,7 @@ func formatSeconds(seconds uint64) string {
 func New() *Structure {
 	ut, err := host.Uptime()
 	if err != nil {
-		panic(e)
+		panic(err)
 	}
 
 	return &Structure{
