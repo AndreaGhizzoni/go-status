@@ -1,12 +1,15 @@
 // this file represents the disk part of package page
 package page
 
-import "github.com/shirou/gopsutil/disk"
+import (
+	"github.com/AndreaGhizzoni/go-status/config"
+	"github.com/shirou/gopsutil/disk"
+)
 
 // paths to watch
-var paths = []string{
+/*var paths = []string{
 	"/home/andrea",
-}
+}*/
 
 type PathStat struct {
 	Fstype      string
@@ -21,13 +24,13 @@ type Disk struct {
 	Paths      map[string]PathStat
 }
 
-func NewDisk() *Disk {
+func NewDisk(cfg *config.Config) *Disk {
 	partitions, _ := disk.Partitions(false)
 	// TODO manage erros
 
 	mappingPaths := make(map[string]PathStat)
 
-	for _, path := range paths {
+	for _, path := range cfg.Watchedpaths {
 		stat, err := disk.Usage(path)
 		if err == nil {
 			mappingPaths[path] = PathStat{

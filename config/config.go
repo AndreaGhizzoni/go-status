@@ -12,8 +12,10 @@ type Config struct {
 	Watchedpaths []string `json:"wp"`
 }
 
+var instance *Config
+
 // TODO add doc
-func New() (*Config, error) {
+func Parse() (*Config, error) {
 	file, err := ioutil.ReadFile(constant.ConfigPath)
 	if err != nil {
 		return nil, err
@@ -24,6 +26,5 @@ func New() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return c, nil
 }

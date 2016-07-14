@@ -30,6 +30,9 @@ var (
 var (
 	// Variable to hold all html template files
 	html = template.Must(template.ParseGlob(constant.TemplateDir + "*.html"))
+
+	// Variable to hold configurator pointer for all web handler
+	cfg *config.Config
 )
 
 // function to initialize the logger
@@ -64,7 +67,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *page.Structure) {
 // Http handler for index
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	Trace.Print("Index handler called")
-	renderTemplate(w, "index", page.New())
+	renderTemplate(w, "index", page.New(cfg))
 }
 
 func shutdownHandler(w http.ResponseWriter, r *http.Request) {
@@ -89,17 +92,13 @@ func exists(path string) (bool, error) {
 
 func main() {
 	flag.BoolVar(&showVersion, "version", false, "show the current version")
-	flag.BoolVar(&testConfig, "conf", false, "test flag")
 	flag.Parse()
 
-	if testConfig {
-		c, err := config.New()
-		if err != nil {
-			panic(err)
-		}
-		fmt.Printf("%v\n", *c)
-		os.Exit(0)
+	c, err := config.Parse()
+	if err != nil {
+		panic(err)
 	}
+	cfg = c
 
 	if showVersion {
 		fmt.Println(version)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/AndreaGhizzoni/go-status/config"
 	"github.com/shirou/gopsutil/host"
 )
 
@@ -25,7 +26,7 @@ func formatSeconds(seconds uint64) string {
 	return fmt.Sprintf("%d:%d:%d", int64(h), int64(m), int64(s))
 }
 
-func New() *Structure {
+func New(cfg *config.Config) *Structure {
 	ut, err := host.Uptime()
 	if err != nil {
 		panic(err)
@@ -36,7 +37,7 @@ func New() *Structure {
 		UpTime:   formatSeconds(ut),
 		CPU:      *NewCPU(),
 		RAM:      *NewRAM(),
-		DiskStat: *NewDisk(),
+		DiskStat: *NewDisk(cfg),
 		NetStat:  *NewNet(),
 	}
 }
