@@ -12,4 +12,9 @@ const (
 	ConfigPath = AppHome + "gos.json"
 	// template home directory
 	TemplateDir = AppHome + "template/"
+
+	Kilobyte uint64 = 1024
+	Megabyte uint64 = 1048576
+	Gigabyte uint64 = 1073741824
+	Terabyte uint64 = 1099511627776
 )

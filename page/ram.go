@@ -1,7 +1,11 @@
 // this file represents the ram part of the package page
 package page
 
-import "github.com/shirou/gopsutil/mem"
+import (
+	"github.com/AndreaGhizzoni/go-status/constant"
+	"github.com/AndreaGhizzoni/go-status/util"
+	"github.com/shirou/gopsutil/mem"
+)
 
 type Ram struct {
 	Total       string
@@ -16,10 +20,10 @@ func NewRAM() *Ram {
 	// TODO check err
 
 	return &Ram{
-		Total:       Format(vmstat.Total, Megabyte),
-		Available:   Format(vmstat.Available, Megabyte),
-		Used:        Format(vmstat.Used, Megabyte),
-		UsedPercent: FormatPercentege(vmstat.UsedPercent),
-		Free:        Format(vmstat.Free, Megabyte),
+		Total:       util.Format(vmstat.Total, constant.Megabyte),
+		Available:   util.Format(vmstat.Available, constant.Megabyte),
+		Used:        util.Format(vmstat.Used, constant.Megabyte),
+		UsedPercent: util.FormatPercentege(vmstat.UsedPercent),
+		Free:        util.Format(vmstat.Free, constant.Megabyte),
 	}
 }

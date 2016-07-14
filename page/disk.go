@@ -3,6 +3,8 @@ package page
 
 import (
 	"github.com/AndreaGhizzoni/go-status/config"
+	"github.com/AndreaGhizzoni/go-status/constant"
+	"github.com/AndreaGhizzoni/go-status/util"
 	"github.com/shirou/gopsutil/disk"
 )
 
@@ -35,10 +37,10 @@ func NewDisk(cfg *config.Config) *Disk {
 		if err == nil {
 			mappingPaths[path] = PathStat{
 				Fstype:      stat.Fstype,
-				Total:       Format(stat.Total, Gigabyte),
-				Free:        Format(stat.Free, Gigabyte),
-				Used:        Format(stat.Used, Gigabyte),
-				UsedPercent: FormatPercentege(stat.UsedPercent),
+				Total:       util.Format(stat.Total, constant.Gigabyte),
+				Free:        util.Format(stat.Free, constant.Gigabyte),
+				Used:        util.Format(stat.Used, constant.Gigabyte),
+				UsedPercent: util.FormatPercentege(stat.UsedPercent),
 			}
 		}
 	}
