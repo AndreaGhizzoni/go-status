@@ -13,8 +13,12 @@ const (
 	// template home directory
 	TemplateDir = AppHome + "template/"
 
+	// how many bytes is 1 Kb
 	Kilobyte uint64 = 1024
+	// how many bytes is 1 Mb
 	Megabyte uint64 = 1048576
+	// how many bytes is 1 Gb
 	Gigabyte uint64 = 1073741824
+	// how many bytes is 1 Tb
 	Terabyte uint64 = 1099511627776
 )
