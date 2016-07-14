@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -36,11 +35,17 @@ var (
 )
 
 // function to initialize the logger
-func initLogger(w io.Writer) {
+func initLogger() {
+	logFile, err := os.OpenFile(constant.LogPath,
+		os.O_CREATE|os.O_WRONLY|os.O_APPEND,
+		0666)
+	if err != nil {
+		log.Fatalln("Failed to open log file :", err)
+	}
 	flag := log.Ldate | log.Ltime | log.Lshortfile
 
-	Trace = log.New(w, "TRACE: ", flag)
-	Error = log.New(w, "ERROR: ", flag)
+	Trace = log.New(logFile, "TRACE: ", flag)
+	Error = log.New(logFile, "ERROR: ", flag)
 }
 
 // function to check if home directory exists, if not create a new one
@@ -86,19 +91,7 @@ func main() {
 		fmt.Println(version)
 	} else {
 		initHomeDir()
-
-		logFile, err := os.OpenFile(constant.LogPath,
-			os.O_CREATE|os.O_WRONLY|os.O_APPEND,
-			0666)
-		if err != nil {
-			log.Fatalln("Failed to open log file :", err)
-		}
-		defer func() {
-			Trace.Print("Closing log file")
-			logFile.Close()
-		}()
-
-		initLogger(logFile)
+		initLogger()
 
 		c, err := config.Parse()
 		if err != nil {
