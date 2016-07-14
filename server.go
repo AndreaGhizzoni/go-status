@@ -11,10 +11,13 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/AndreaGhizzoni/go-status/config"
+	"github.com/AndreaGhizzoni/go-status/constant"
 	"github.com/AndreaGhizzoni/go-status/page"
 )
 
 var (
+	testConfig  = false
 	showVersion = false
 	version     = "0.1.0"
 )
@@ -25,19 +28,8 @@ var (
 )
 
 var (
-	port = ":8080"
-
-	// application home directory
-	appHome = "/home/andrea/.gos/"
-
-	// template home directory
-	templateDir = appHome + "template/"
-
 	// Variable to hold all html template files
-	html = template.Must(template.ParseGlob(templateDir + "*.html"))
-
-	// default application log path
-	defLogPath = appHome + "gos.log"
+	html = template.Must(template.ParseGlob(constant.TemplateDir + "*.html"))
 )
 
 // function to initialize the logger
@@ -50,8 +42,8 @@ func initLogger(w io.Writer) {
 
 // function to check if home directory exists, if not create a new one
 func initHomeDir() {
-	if e, _ := exists(appHome); !e {
-		err := os.Mkdir(appHome, 0700)
+	if e, _ := exists(constant.AppHome); !e {
+		err := os.Mkdir(constant.AppHome, 0700)
 		if err != nil {
 			panic(err)
 		}
@@ -97,14 +89,24 @@ func exists(path string) (bool, error) {
 
 func main() {
 	flag.BoolVar(&showVersion, "version", false, "show the current version")
+	flag.BoolVar(&testConfig, "conf", false, "test flag")
 	flag.Parse()
+
+	if testConfig {
+		c, err := config.New()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("%v\n", *c)
+		os.Exit(0)
+	}
 
 	if showVersion {
 		fmt.Println(version)
 	} else {
 		initHomeDir()
 
-		logFile, err := os.OpenFile(defLogPath,
+		logFile, err := os.OpenFile(constant.LogPath,
 			os.O_CREATE|os.O_WRONLY|os.O_APPEND,
 			0666)
 		if err != nil {
@@ -120,10 +122,10 @@ func main() {
 		Trace.Print("Program Start")
 		http.HandleFunc("/", rootHandler)
 		http.HandleFunc("/shutdown", shutdownHandler)
-		fs := http.FileServer(http.Dir(templateDir))
+		fs := http.FileServer(http.Dir(constant.TemplateDir))
 		http.Handle("/template/", http.StripPrefix("/template/", fs))
 		Trace.Print("Server Started")
 		Error.Fatal(
-			http.ListenAndServe(port, nil))
+			http.ListenAndServe(constant.Port, nil))
 	}
 }
