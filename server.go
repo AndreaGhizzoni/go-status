@@ -83,12 +83,6 @@ func main() {
 	flag.BoolVar(&showVersion, "version", false, "show the current version")
 	flag.Parse()
 
-	c, err := config.Parse()
-	if err != nil {
-		panic(err)
-	}
-	cfg = c
-
 	if showVersion {
 		fmt.Println(version)
 	} else {
@@ -106,6 +100,12 @@ func main() {
 		}()
 
 		initLogger(logFile)
+
+		c, err := config.Parse()
+		if err != nil {
+			Error.Fatal(err)
+		}
+		cfg = c
 
 		Trace.Print("Program Start")
 		http.HandleFunc("/", rootHandler)
