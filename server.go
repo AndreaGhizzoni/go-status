@@ -14,6 +14,7 @@ import (
 	"github.com/AndreaGhizzoni/go-status/config"
 	"github.com/AndreaGhizzoni/go-status/constant"
 	"github.com/AndreaGhizzoni/go-status/page"
+	"github.com/AndreaGhizzoni/go-status/util"
 )
 
 var (
@@ -45,7 +46,7 @@ func initLogger(w io.Writer) {
 
 // function to check if home directory exists, if not create a new one
 func initHomeDir() {
-	if e, _ := exists(constant.AppHome); !e {
+	if e, _ := util.Exists(constant.AppHome); !e {
 		err := os.Mkdir(constant.AppHome, 0700)
 		if err != nil {
 			panic(err)
@@ -79,7 +80,7 @@ func shutdownHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // exists returns whether the given file or directory exists or not
-func exists(path string) (bool, error) {
+/*func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
 		return true, nil
@@ -88,7 +89,7 @@ func exists(path string) (bool, error) {
 		return false, nil
 	}
 	return true, err
-}
+}*/
 
 func main() {
 	flag.BoolVar(&showVersion, "version", false, "show the current version")
