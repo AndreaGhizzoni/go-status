@@ -21,6 +21,13 @@ To sum up `.gos` folder structure:
 Style and images can be customize as the user want, just follow the template 
 parameters in `index.html`
 
+# How to install
+```bash
+go get github.com/AndreaGhizzoni/go-status
+go install github.com/AndreaGhizzoni/go-status
+```
+
 # Thanks to
 [gopsutil](https://github.com/shirou/gopsutil)
+
 [skeleton](http://getskeleton.com/)
