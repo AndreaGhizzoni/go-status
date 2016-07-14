@@ -79,18 +79,6 @@ func shutdownHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// exists returns whether the given file or directory exists or not
-/*func exists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return true, err
-}*/
-
 func main() {
 	flag.BoolVar(&showVersion, "version", false, "show the current version")
 	flag.Parse()
