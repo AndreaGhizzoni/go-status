@@ -46,7 +46,7 @@ func initLogger(w io.Writer) {
 
 // function to check if home directory exists, if not create a new one
 func initHomeDir() {
-	if e, _ := util.Exists(constant.AppHome); !e {
+	if e, _ := util.ExistsPath(constant.AppHome); !e {
 		err := os.Mkdir(constant.AppHome, 0700)
 		if err != nil {
 			panic(err)
