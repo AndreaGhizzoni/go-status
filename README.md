@@ -8,8 +8,7 @@ cd github.com/AndreaGhizzoni/go-status
 make
 ```
 
-At this point will be create a directory `deploy` in the project directory that 
-contains:
+At this point will be create a directory called `deploy` that contains:
 ```
 ├── deploy/
 │   ├── go-status*
@@ -23,11 +22,9 @@ contains:
 
 ```
 
-Go-status NEEDS that the folder `template` is in it's same directory in order to
-serve html page.
-
-It's important that THERE IS at least an html template (inde.html) into template
-folder in order to let go-status to serve it as root.
+Go-status needs:
+- `template` folder is in the same directory of `go-status*` binary
+- `template` folder contains *at least* an `index.html` page to serve it as root
 
 Go-status is configured to serve css and image folder ( into template folder )
 to let every html template to use some css and image.
