@@ -56,6 +56,9 @@ Just add some path separated by comma, for example:
 ```json
 { "wp" : ["/some/path", "/other/path"] }
 ```
+### Troubleshooting
+If you have added a path and on disk section is not showing up, double check the
+path on `.gos/gos.json` because go-status has not found it on your system.
 
 # Thanks to
 [gopsutil](https://github.com/shirou/gopsutil)
