@@ -51,7 +51,7 @@ Inside of it will be a file called `gos.json` that looks like this:
 `wp` attribute stands for *Watched Paths* that will be displayed in the Disk
 section of default template (index.html)
 
-### How to add new path ?
+### How do I add a new path ?
 Just add some path separated by comma, for example:
 ```json
 { "wp" : ["/some/path", "/other/path"] }
