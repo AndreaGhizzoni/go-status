@@ -59,7 +59,7 @@ func initHomeDir() {
 	if e, _ := util.ExistsPath(constant.AppHome); !e {
 		err := os.Mkdir(constant.AppHome, 0700)
 		if err != nil {
-			ErrorC.Fatalln("Failed to create home dir:", err)
+			ErrorC.Fatalln("Failed to create home dir: ", err)
 		}
 	}
 }
@@ -85,7 +85,8 @@ func shutdownHandler(w http.ResponseWriter, r *http.Request) {
 	TraceF.Print("Shutdown handler called")
 	err := exec.Command("/sbin/poweroff").Run()
 	if err != nil {
-		ErrorF.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		ErrorF.Println(err)
 	}
 }
 
