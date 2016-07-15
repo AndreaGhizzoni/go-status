@@ -8,6 +8,7 @@
 *.so
 
 # Folders
+deploy
 _obj
 _test
 
