@@ -22,9 +22,15 @@ var (
 )
 
 var (
+	// log pattern
+	logPattern int = log.Ldate | log.Ltime | log.Lshortfile
+
+	// log error to console
+	ErrorC *log.Logger = log.New(os.Stderr, "ERROR: ", logPattern)
+
+	// trace log and error to file
 	TraceF *log.Logger
 	ErrorF *log.Logger
-	ErrorC *log.Logger
 )
 
 var (
@@ -37,9 +43,6 @@ var (
 
 // function to initialize the logger
 func initLogger() {
-	flag := log.Ldate | log.Ltime | log.Lshortfile
-	ErrorC = log.New(os.Stderr, "ERROR: ", flag)
-
 	logFile, err := os.OpenFile(constant.LogPath,
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND,
 		0666)
@@ -47,8 +50,8 @@ func initLogger() {
 		ErrorC.Fatalln("Failed to open log file :", err)
 	}
 
-	TraceF = log.New(logFile, "TRACE: ", flag)
-	ErrorF = log.New(logFile, "ERROR: ", flag)
+	TraceF = log.New(logFile, "TRACE: ", logPattern)
+	ErrorF = log.New(logFile, "ERROR: ", logPattern)
 }
 
 // function to check if home directory exists, if not create a new one
@@ -56,7 +59,7 @@ func initHomeDir() {
 	if e, _ := util.ExistsPath(constant.AppHome); !e {
 		err := os.Mkdir(constant.AppHome, 0700)
 		if err != nil {
-			panic(err)
+			ErrorC.Fatalln("Failed to create home dir:", err)
 		}
 	}
 }
