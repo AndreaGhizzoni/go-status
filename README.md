@@ -31,8 +31,18 @@ Go-status is configured to serve css and image folder ( into template folder )
 to let every html template to use some css and image.
 
 # Configuration
-Go-status creates it's home directory into `~/.gos` folder where `~` is the home
-of user that runs go-status.
+Go-status create it's home directory in `/home/andrea/`. Now that is my
+configuration on my machines, to modify this condition edit the file
+`constant/constant.go` and change the following part:
+```go
+const (
+    ...
+    AppHome = "/some/other/path"
+    ...
+)
+```
+I did this because panic error occurs when run `user.Current()` method on linux
+arm.
 
 Inside of it will be a file called `gos.json` that looks like this:
 ```json
