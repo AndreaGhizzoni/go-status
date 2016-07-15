@@ -1,19 +1,15 @@
 package constant
 
-import "os/user"
-
-var (
-	// application home directory
-	AppHome = userDir() + "/.gos/"
-	// default application log path
-	LogPath = AppHome + "gos.log"
-	// defatul configuration file
-	ConfigPath = AppHome + "gos.json"
-)
-
 const (
 	// application server port
 	Port = ":8080"
+
+	// application home directory
+	AppHome = "/home/andrea/.gos/"
+	// default application log path
+	LogPath = AppHome + "gos.log"
+	// default configuration file
+	ConfigPath = AppHome + "gos.json"
 
 	// template home directory
 	TemplateDir = "template/"
@@ -27,12 +23,3 @@ const (
 	// how many bytes is 1 Tb
 	Terabyte uint64 = 1099511627776
 )
-
-// package function to get current user safe
-func userDir() string {
-	u, err := user.Current()
-	if err != nil {
-		panic(err) // this must be a critical error
-	}
-	return u.HomeDir
-}
