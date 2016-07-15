@@ -22,8 +22,9 @@ var (
 )
 
 var (
-	Trace *log.Logger
-	Error *log.Logger
+	TraceF *log.Logger
+	ErrorF *log.Logger
+	ErrorC *log.Logger
 )
 
 var (
@@ -36,16 +37,18 @@ var (
 
 // function to initialize the logger
 func initLogger() {
+	flag := log.Ldate | log.Ltime | log.Lshortfile
+	ErrorC = log.New(os.Stderr, "ERROR: ", flag)
+
 	logFile, err := os.OpenFile(constant.LogPath,
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND,
 		0666)
 	if err != nil {
-		log.Fatalln("Failed to open log file :", err)
+		ErrorC.Fatalln("Failed to open log file :", err)
 	}
-	flag := log.Ldate | log.Ltime | log.Lshortfile
 
-	Trace = log.New(logFile, "TRACE: ", flag)
-	Error = log.New(logFile, "ERROR: ", flag)
+	TraceF = log.New(logFile, "TRACE: ", flag)
+	ErrorF = log.New(logFile, "ERROR: ", flag)
 }
 
 // function to check if home directory exists, if not create a new one
@@ -71,15 +74,15 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *page.Structure) {
 
 // Http handler for index
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	Trace.Print("Index handler called")
+	TraceF.Print("Index handler called")
 	renderTemplate(w, "index", page.New(cfg))
 }
 
 func shutdownHandler(w http.ResponseWriter, r *http.Request) {
-	Trace.Print("Shutdown handler called")
+	TraceF.Print("Shutdown handler called")
 	err := exec.Command("/sbin/poweroff").Run()
 	if err != nil {
-		Error.Fatal(err)
+		ErrorF.Fatal(err)
 	}
 }
 
@@ -95,17 +98,16 @@ func main() {
 
 		c, err := config.Parse()
 		if err != nil {
-			Error.Fatal(err)
+			ErrorF.Fatal(err)
 		}
 		cfg = c
 
-		Trace.Print("Program Start")
+		TraceF.Print("Program Start")
 		http.HandleFunc("/", rootHandler)
 		http.HandleFunc("/shutdown", shutdownHandler)
 		fs := http.FileServer(http.Dir(constant.TemplateDir))
 		http.Handle("/template/", http.StripPrefix("/template/", fs))
-		Trace.Print("Server Started")
-		Error.Fatal(
-			http.ListenAndServe(constant.Port, nil))
+		TraceF.Print("Server Started")
+		ErrorF.Fatal(http.ListenAndServe(constant.Port, nil))
 	}
 }
