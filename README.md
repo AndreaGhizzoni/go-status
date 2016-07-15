@@ -1,4 +1,5 @@
 # go-status
+![alt tag](http://andreaghizzoni.github.io/static/img/go-status_prev.png)
 Simple project to monitoring computer status from browser.
 
 # How to install
