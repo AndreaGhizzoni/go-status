@@ -11,7 +11,7 @@ const (
 	// defatul configuration file
 	ConfigPath = AppHome + "gos.json"
 	// template home directory
-	TemplateDir = AppHome + "template/"
+	TemplateDir = "template/"
 
 	// how many bytes is 1 Kb
 	Kilobyte uint64 = 1024
